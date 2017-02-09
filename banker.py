@@ -22,6 +22,7 @@ class Saving(Account): # Saving is an Account
       self.accCreatedAt = time.time()
       self.accBalance = initialdeposit
       Saving.__accountsCreated += 1
+   
    def getBalance(self):
       return self.accBalance
 
@@ -34,16 +35,17 @@ class Saving(Account): # Saving is an Account
    def deposit(self,amount):
       if (type(amount) is float or type(amount) is int) and amount > 0:
          self.accBalance += amount;
+         return self.accBalance
       else:
-         return "Please check the amount you have specifies to see it meets the requirements of being a Decimal number"
-      return " New balance is " + str(self.accBalance)   
-
+         #return "Please check the amount you have specifies to see it meets the requirements of being a Decimal number"
+         return amount
+      
    def withdraw(self, amount):
       if self.accBalance > amount:
          self.accBalance -= amount
+         return self.accBalance
       else:
-         return "Insufficient balance to withdraw " + str(amount)
-      return self.accNumber
+         return amount
 
 #Fixed Account class
 class Fixed(Account): # Fixed is an Account
@@ -74,23 +76,6 @@ class Fixed(Account): # Fixed is an Account
    def withdraw(self):
       #since it is fixed account,we dont withdraw partial amounts, we besically take everything out 
       # it is important that we check if the balance has matured
-      today = time.time();
-      maturity_time = self.fixedTerm * 24 * 60 * 60# we find the number of seconds that are eqaul to fixedTerm
-      if today - self.accCreatedAt < maturity_time :
-         return "The investiment is not yet matured"
-
       amount = self.getBalance();
       self.accBalance = 0;
-      return str(amount) + " has been successfully withdrawn"
-
-#Run tests
-account = Saving("Timothy Wikedzi","0756556616",2000)
-print(account.getBalance())
-account.deposit(430)
-print(account.getBalance())
-
-#run tests for a fixed account
-print("----------------Fixed account---------")
-account = Fixed("Gladness Wikedzi","0754556616",2000,365,0.5)
-print(account.getBalance())
-print(account.withdraw())
+      return self.accBalance
